@@ -5,5 +5,5 @@ const app = express();
 app.listen(3000);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Welcome to Kinasis API!');
 });
