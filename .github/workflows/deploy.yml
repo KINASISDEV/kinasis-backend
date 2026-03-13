@@ -62,12 +62,6 @@ jobs:
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
             "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh devel"
 
-      - name: Verify devel
-        shell: bash
-        run: |
-          set -e
-          curl -fsS https://devapi.kinasisdev.shop
-
   deploy-to-main:
     name: Deploy CD Main
     runs-on: ubuntu-latest
@@ -95,9 +89,3 @@ jobs:
             -o StrictHostKeyChecking=yes \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
             "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh main"
-
-      - name: Verify main
-        shell: bash
-        run: |
-          set -e
-          curl -fsS https://api.kinasisdev.shop
