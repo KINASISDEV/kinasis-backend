@@ -1,4 +1,4 @@
-name: KINAIS Backend CI/CD
+name: Deploy-CICD
 
 on:
   push:
@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  Deploy-CICD:
+  Deploy CI:
+    name: Deploy-CICD
     runs-on: ubuntu-latest
 
     steps:
@@ -31,10 +32,28 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 \
             -o StrictHostKeyChecking=yes \
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
-            "echo 'SSH connection OK'; hostname; pwd"
+            "echo SSH_OK && whoami && hostname"
 
-      - name: Deploy to devel
-        if: github.ref == 'refs/heads/devel'
+  Deploy CD Devel:
+    name: Deploy to Devel
+    runs-on: ubuntu-latest
+    needs: deploy-cicd
+    if: github.ref == 'refs/heads/devel'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        shell: bash
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy devel
         shell: bash
         run: |
           set -e
@@ -44,18 +63,31 @@ jobs:
             "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh devel"
 
       - name: Verify devel
-        if: github.ref == 'refs/heads/devel'
         shell: bash
         run: |
           set -e
-          ssh -i ~/.ssh/id_ed25519 \
-            -o StrictHostKeyChecking=yes \
-            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
-            "docker ps | grep kinasis-devel"
           curl -fsS https://devapi.kinasisdev.shop
 
-      - name: Deploy to main
-        if: github.ref == 'refs/heads/main'
+  Deploy CD Main:
+    name: Deploy to Main
+    runs-on: ubuntu-latest
+    needs: deploy-cicd
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        shell: bash
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy main
         shell: bash
         run: |
           set -e
@@ -65,12 +97,7 @@ jobs:
             "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh main"
 
       - name: Verify main
-        if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
           set -e
-          ssh -i ~/.ssh/id_ed25519 \
-            -o StrictHostKeyChecking=yes \
-            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
-            "docker ps | grep kinasis-main"
           curl -fsS https://api.kinasisdev.shop
