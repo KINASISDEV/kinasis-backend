@@ -1,0 +1,76 @@
+name: Deploy API to EC2
+
+on:
+  push:
+    branches:
+      - devel
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH
+        shell: bash
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        shell: bash
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "echo 'SSH connection OK'; hostname; pwd"
+
+      - name: Deploy to devel
+        if: github.ref == 'refs/heads/devel'
+        shell: bash
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh devel"
+
+      - name: Verify devel
+        if: github.ref == 'refs/heads/devel'
+        shell: bash
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "docker ps | grep kinasis-devel"
+          curl -fsS https://devapi.kinasisdev.shop
+
+      - name: Deploy to main
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "cd /home/ec2-user/apps/kinasis-backend && ./config/deploy.sh main"
+
+      - name: Verify main
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -e
+          ssh -i ~/.ssh/id_ed25519 \
+            -o StrictHostKeyChecking=yes \
+            "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
+            "docker ps | grep kinasis-main"
+          curl -fsS https://api.kinasisdev.shop
