@@ -15,8 +15,8 @@
   },
   "license": "ISC",
   "author": "kinasis dev",
-  "type": "commonjs",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
