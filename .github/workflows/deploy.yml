@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  Deploy_CI:
-    name: Deploy-CICD
+  deploy-cicd:
+    name: Deploy CI
     runs-on: ubuntu-latest
 
     steps:
@@ -34,8 +34,8 @@ jobs:
             "${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}" \
             "echo SSH_OK && whoami && hostname"
 
-  Deploy_CD_Devel:
-    name: Deploy to Devel
+  deploy-to-devel:
+    name: Deploy CD Devel
     runs-on: ubuntu-latest
     needs: deploy-cicd
     if: github.ref == 'refs/heads/devel'
@@ -68,8 +68,8 @@ jobs:
           set -e
           curl -fsS https://devapi.kinasisdev.shop
 
-  Deploy_CD_Main:
-    name: Deploy to Main
+  deploy-to-main:
+    name: Deploy CD Main
     runs-on: ubuntu-latest
     needs: deploy-cicd
     if: github.ref == 'refs/heads/main'
