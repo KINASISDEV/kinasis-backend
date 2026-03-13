@@ -1,4 +1,4 @@
-name: Deploy API to EC2
+name: KINAIS Backend CI/CD
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  Deploy-CICD:
     runs-on: ubuntu-latest
 
     steps:
