@@ -1,0 +1,26 @@
+{
+  "name": "kinasis-backend",
+  "version": "1.0.0",
+  "description": "api with nodejs for kinasis-web and kinasis-ecommerce",
+  "keywords": [
+    "nodejs"
+  ],
+  "homepage": "https://github.com/KINASISDEV/kinasis-backend#readme",
+  "bugs": {
+    "url": "https://github.com/KINASISDEV/kinasis-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KINASISDEV/kinasis-backend.git"
+  },
+  "license": "ISC",
+  "author": "kinasis dev",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
