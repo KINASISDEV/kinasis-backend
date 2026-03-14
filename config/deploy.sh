@@ -6,8 +6,8 @@ BRANCH=$1
 cd ~/apps/kinasis-backend
 
 git fetch origin
-git checkout "$BRANCH"
-git pull origin "$BRANCH"
+git checkout $BRANCH
+git pull origin $BRANCH
 
 if [ "$BRANCH" = "main" ]; then
     CONTAINER_NAME="kinasis-main"
