@@ -1,5 +1,5 @@
 import { connectToDatabase } from '../services/mongo.js';
-import { memberSchema } from '../models/MembersModel.js';
+import { memberSchema } from '../models/membersModel.js';
 
 
 export const getMembers = async (req, res) => {
