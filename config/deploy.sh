@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BRANCH="$1"
+BRANCH=$1
 
 cd ~/apps/kinasis-backend
 
