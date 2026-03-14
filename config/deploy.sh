@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 BRANCH=$1
 
@@ -13,17 +12,14 @@ if [ "$BRANCH" = "main" ]; then
     CONTAINER_NAME="kinasis-main"
     PORT=3001
     ENV_FILE=".env"
-elif [ "$BRANCH" = "devel" ]; then
+else
     CONTAINER_NAME="kinasis-devel"
     PORT=3002
     ENV_FILE=".dev.env"
-else
-    echo "Rama no soportada: $BRANCH"
-    exit 1
 fi
 
 if [ ! -f "$ENV_FILE" ]; then
-    echo "No existe el archivo de entorno: $PROJECT_DIR/$ENV_FILE"
+    echo "No existe el archivo de entorno: $ENV_FILE"
     exit 1
 fi
 
