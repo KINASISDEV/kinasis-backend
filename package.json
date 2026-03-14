@@ -21,9 +21,7 @@
     "#src/*": "./src/*",
     "#controllers/*": "./src/controllers/*",
     "#models/*": "./src/models/*",
-    "#enpoints/*": "./src/enpoints/*",
-    "#middlewares/*": "./src/middlewares/*",
-    "#config/*": "./src/config/*"
+    "#enpoints/*": "./src/enpoints/*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
