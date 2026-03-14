@@ -1,5 +1,5 @@
 import express from 'express';
-import { startServer } from './config/mongo.js';
+import { startServer } from './services/mongo.js';
 
 const app = express();
 startServer(app);
