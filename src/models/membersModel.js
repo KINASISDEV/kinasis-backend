@@ -1,7 +1,6 @@
 
 import { randomUUID } from 'node:crypto';
 import mongoose from 'mongoose';
-import { connectToDatabase } from '../services/mongo.js';
 
 const generateMemberUUID = () => {
     const hex = randomUUID().replace(/-/g, '').toUpperCase();
