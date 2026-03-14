@@ -17,6 +17,12 @@
   "author": "kinasis dev",
   "main": "src/index.js",
   "type": "module",
+  "imports": {
+    "#src/*": "./src/*",
+    "#controllers/*": "./src/controllers/*",
+    "#models/*": "./src/models/*",
+    "#enpoints/*": "./src/enpoints/*"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js"
