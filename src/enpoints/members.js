@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { getMembers } from '../controllers/membersController.js';
+import { getMembers, getImageMemberS3 } from '../controllers/membersController.js';
 
 const router = Router();
 
 router.get('/', getMembers);
+router.get('/getImageMemberS3', getImageMemberS3);
 
 export default router;
