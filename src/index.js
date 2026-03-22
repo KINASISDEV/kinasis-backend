@@ -10,6 +10,7 @@ startServer(app);
 app.use(cors({
 	origin: [
 		'http://localhost:5173',
+		'https://dev.kinasisdev.shop',
 		'https://kinasisdev.shop',
 		'https://www.kinasisdev.shop'
 	]
