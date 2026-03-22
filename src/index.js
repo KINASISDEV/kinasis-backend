@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { startServer } from './services/mongo.js';
 import membersRouter from './enpoints/members.js';
+import dataRouter from './enpoints/data.js';
 
 const app = express();
 startServer(app);
@@ -18,3 +19,4 @@ app.use(express.json());
 app.get('/', (req, res) => {res.send('Welcome to Kinasis API!');});
 
 app.use('/members', membersRouter);
+app.use('/data', dataRouter);
